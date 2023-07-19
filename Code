@@ -1,0 +1,646 @@
+public class Caso_estudio2 {
+
+    public static void main(String[] args) {
+        
+        ListaLibros listaLibros = new ListaLibros();
+
+       
+        Libro libro1 = new Libro(1, "Hola","Daniel","La Nacion");
+        Libro libro2 = new Libro(2, "Loteria", "Lola","La Teja");
+        Libro libro3 = new Libro(3, "Empanadas", "David", "La Extra");
+        listaLibros.insertarLibro(libro1);
+        listaLibros.insertarLibro(libro2);
+        listaLibros.insertarLibro(libro3);
+
+        
+        System.out.println("Lista de libros:");
+        listaLibros.mostrarLista();
+
+       
+        int idBusqueda = 2;
+        if (listaLibros.existeLibro(idBusqueda)) {
+            System.out.println("El libro con ID " + idBusqueda + " existe en la lista.");
+        } else {
+            System.out.println("El libro con ID " + idBusqueda + " no existe en la lista.");
+        }}}
+       
+public class DatoListaCategorias {
+    private int id;
+    private String nombre;
+    private ListaLibros lista;
+
+    public DatoListaCategorias(int id, String nombre, ListaLibros lista) {
+        this.id = id;
+        this.nombre = nombre;
+        this.lista = lista;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public ListaLibros getLista() {
+        return lista;
+    }
+
+    public void setLista(ListaLibros lista) {
+        this.lista = lista;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Nombre: " + nombre;
+    }
+}
+
+public class DatoListaPrestamos {
+    private Libro libro;
+    private String fechaPrestamo;
+    private String fechaDevolucion;
+    private String nombreUsuario;
+    private String cedulaUsuario;
+
+    public DatoListaPrestamos(Libro libro, String fechaPrestamo, String fechaDevolucion, String nombreUsuario, String cedulaUsuario) {
+        this.libro = libro;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaDevolucion = fechaDevolucion;
+        this.nombreUsuario = nombreUsuario;
+        this.cedulaUsuario = cedulaUsuario;
+    }
+
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Libro libro) {
+        this.libro = libro;
+    }
+
+    public String getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public void setFechaPrestamo(String fechaPrestamo) {
+        this.fechaPrestamo = fechaPrestamo;
+    }
+
+    public String getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(String fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getCedulaUsuario() {
+        return cedulaUsuario;
+    }
+
+    public void setCedulaUsuario(String cedulaUsuario) {
+        this.cedulaUsuario = cedulaUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Libro: " + libro.toString() + ", Fecha de préstamo: " + fechaPrestamo + ", Fecha de devolución: "
+                + fechaDevolucion + ", Nombre de usuario: " + nombreUsuario + ", Cédula de usuario: " + cedulaUsuario;
+    }
+}
+
+public class Libro {
+    private int id;
+    private String nombre;
+    private String autor;
+    private String editorial;
+
+    public Libro(int id, String nombre, String autor, String editorial) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.editorial = editorial;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public String getEditorial() {
+        return editorial;
+    }
+
+    public void setEditorial(String editorial) {
+        this.editorial = editorial;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Nombre: " + nombre + ", Autor: " + autor + ", Editorial: " + editorial;
+    }
+}
+
+public class ListaCategorias {
+    private NodoListaCategorias cabeza;
+    private NodoListaCategorias ultimo;
+
+    public void insertar(DatoListaCategorias dato) {
+        if (cabeza == null) {
+            cabeza = new NodoListaCategorias(dato);
+            ultimo = cabeza;
+            ultimo.setSiguiente(cabeza);
+        } else {
+            if (dato.getId() < cabeza.getDato().getId()) {
+                
+                NodoListaCategorias auxiliar = new NodoListaCategorias(dato);
+                auxiliar.setSiguiente(cabeza);
+                cabeza = auxiliar;
+                ultimo.setSiguiente(cabeza);
+            } else {
+                if (ultimo.getDato().getId() < dato.getId()) {
+                   
+                    NodoListaCategorias auxiliar = new NodoListaCategorias(dato);
+                    ultimo.setSiguiente(auxiliar);
+                    ultimo = auxiliar;
+                    ultimo.setSiguiente(cabeza);
+                } else {
+                   
+                    NodoListaCategorias auxiliar = cabeza;
+                    while (auxiliar.getSiguiente().getDato().getId() < dato.getId()) {
+                        auxiliar = auxiliar.getSiguiente();
+                    }
+
+                    NodoListaCategorias temporal = new NodoListaCategorias(dato);
+                    temporal.setSiguiente(auxiliar.getSiguiente());
+                    auxiliar.setSiguiente(temporal);
+                }
+            }
+        }
+    }
+
+    public String imprimirSiguienteDelUltimo() {
+        return ultimo.getSiguiente().toString();
+    }
+    
+    public void insertarCategoria(DatoListaCategorias dato) {
+    if (cabeza == null) {
+        cabeza = new NodoListaCategorias(dato);
+        ultimo = cabeza;
+        ultimo.setSiguiente(cabeza);
+    } else {
+        if (dato.getNombre().compareToIgnoreCase(cabeza.getDato().getNombre()) < 0) {
+            
+            NodoListaCategorias aux = new NodoListaCategorias(dato);
+            aux.setSiguiente(cabeza);
+            cabeza = aux;
+            ultimo.setSiguiente(cabeza);
+        } else if (dato.getNombre().compareToIgnoreCase(ultimo.getDato().getNombre()) > 0) {
+            
+            NodoListaCategorias aux = new NodoListaCategorias(dato);
+            ultimo.setSiguiente(aux);
+            ultimo = aux;
+            ultimo.setSiguiente(cabeza);
+        } else {
+            
+            NodoListaCategorias aux = cabeza;
+            while (dato.getNombre().compareToIgnoreCase(aux.getSiguiente().getDato().getNombre()) > 0) {
+                aux = aux.getSiguiente();
+            }
+            NodoListaCategorias nuevo = new NodoListaCategorias(dato);
+            nuevo.setSiguiente(aux.getSiguiente());
+            aux.setSiguiente(nuevo);
+        }
+    }
+}
+    
+    public boolean existeCategoria(String nombre) {
+    NodoListaCategorias aux = cabeza;
+    while (aux != null) {
+        if (aux.getDato().getNombre().equalsIgnoreCase(nombre)) {
+            return true;
+        }
+        aux = aux.getSiguiente();
+        if (aux == cabeza) {
+            break;
+        }
+    }
+    return false;
+}
+
+    @Override
+    public String toString() {
+        String respuesta = "Lista circular: \n";
+
+        NodoListaCategorias auxiliar = cabeza;
+
+        if (auxiliar != null) {
+            
+            respuesta += auxiliar.toString() + "\n";
+            auxiliar = auxiliar.getSiguiente();
+            while (auxiliar != cabeza) {
+                respuesta += auxiliar.toString() + "\n";
+                auxiliar = auxiliar.getSiguiente();
+            }
+        } else {
+            respuesta += "Vacía";
+        }
+
+        return respuesta;
+    }
+    
+    
+}
+
+public class ListaLibros {
+    private NodoListaLibros cabeza;
+    
+
+    public void insertar(Libro libro) {
+        if (cabeza == null) {
+            cabeza = new NodoListaLibros(libro);
+        } else {
+            if (libro.getId() < cabeza.getDato().getId()) {
+                NodoListaLibros auxiliar = new NodoListaLibros(libro);
+                auxiliar.setSiguiente(cabeza);
+                cabeza = auxiliar;
+            } else {
+                NodoListaLibros auxiliar = cabeza;
+                while (auxiliar.getSiguiente() != null && auxiliar.getSiguiente().getDato().getId() < libro.getId()) {
+                    auxiliar = auxiliar.getSiguiente();
+                }
+                NodoListaLibros nuevo = new NodoListaLibros(libro);
+                nuevo.setSiguiente(auxiliar.getSiguiente());
+                auxiliar.setSiguiente(nuevo);
+            }
+        }
+    }
+    
+        public void eliminar(int id) {
+        if (cabeza == null) {
+            return;
+        }
+        
+        if (cabeza.getDato().getId() == id) {
+            cabeza = cabeza.getSiguiente();
+            return;
+        }
+        
+        NodoListaLibros anterior = cabeza;
+        NodoListaLibros actual = cabeza.getSiguiente();
+        
+        while (actual != null && actual.getDato().getId() != id) {
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+        
+        if (actual != null) {
+            anterior.setSiguiente(actual.getSiguiente());
+        }
+    }
+
+public void insertarLibro(Libro libro) {
+    if (cabeza == null) {
+        cabeza = new NodoListaLibros(libro);
+    } else if (libro.getId() < cabeza.getDato().getId()) {
+        NodoListaLibros aux = new NodoListaLibros(libro);
+        aux.setSiguiente(cabeza);
+        cabeza = aux;
+    } else {
+        NodoListaLibros aux = cabeza;
+        while (aux.getSiguiente() != null && libro.getId() > aux.getSiguiente().getDato().getId()) {
+            aux = aux.getSiguiente();
+        }
+        NodoListaLibros nuevo = new NodoListaLibros(libro);
+        nuevo.setSiguiente(aux.getSiguiente());
+        aux.setSiguiente(nuevo);
+    }
+}
+
+public boolean existeLibro(int id) {
+    NodoListaLibros aux = cabeza;
+    while (aux != null) {
+        if (aux.getDato().getId() == id) {
+            return true;
+        }
+        aux = aux.getSiguiente();
+    }
+    return false;
+}
+
+    public void mostrarLista() {
+        NodoListaLibros auxiliar = cabeza;
+        while (auxiliar != null) {
+            System.out.println(auxiliar.getDato().toString());
+            auxiliar = auxiliar.getSiguiente();
+        }
+    }
+
+    Libro extraer(int idExtraer) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+}
+
+public class ListaPrestamos {
+    private NodoListaPrestamos cabeza;
+    private NodoListaPrestamos ultimo;
+
+    public void insertar(DatoListaPrestamos dato) {
+        if (cabeza == null) {
+            cabeza = new NodoListaPrestamos(dato);
+            ultimo = cabeza;
+            cabeza.setAnterior(ultimo);
+            cabeza.setSiguiente(ultimo);
+            ultimo.setSiguiente(cabeza);
+            ultimo.setAnterior(cabeza);
+        } else {
+            if (cabeza.getDato().getLibro().getId() > dato.getLibro().getId()) {
+                NodoListaPrestamos aux = new NodoListaPrestamos(dato);
+                aux.setSiguiente(cabeza);
+                cabeza.setAnterior(aux);
+                cabeza = aux;
+                cabeza.setAnterior(ultimo);
+                ultimo.setSiguiente(cabeza);
+            } else {
+                if (dato.getLibro().getId() > ultimo.getDato().getLibro().getId()) {
+                    NodoListaPrestamos aux = new NodoListaPrestamos(dato);
+                    aux.setAnterior(ultimo);
+                    ultimo.setSiguiente(aux);
+                    ultimo = aux;
+                    ultimo.setSiguiente(cabeza);
+                    cabeza.setAnterior(ultimo);
+                } else {
+                    NodoListaPrestamos aux = cabeza.getSiguiente();
+                    while (aux.getDato().getLibro().getId() < dato.getLibro().getId()) {
+                        aux = aux.getSiguiente();
+                    }
+                    NodoListaPrestamos temp = new NodoListaPrestamos(dato);
+                    temp.setAnterior(aux.getAnterior());
+                    temp.setSiguiente(aux);
+                    aux.setAnterior(temp);
+                    temp.getAnterior().setSiguiente(temp);
+                }
+            }
+        }
+    }
+
+    public void extraer(int id) {
+        if (cabeza == null) {
+            return;
+        }
+
+        if (cabeza.getDato().getLibro().getId() == id) {
+            cabeza = cabeza.getSiguiente();
+            ultimo.setSiguiente(cabeza);
+            cabeza.setAnterior(ultimo);
+            return;
+        }
+
+        NodoListaPrestamos aux = cabeza.getSiguiente();
+
+        while (aux != cabeza) {
+            if (aux.getDato().getLibro().getId() == id) {
+                aux.getAnterior().setSiguiente(aux.getSiguiente());
+                aux.getSiguiente().setAnterior(aux.getAnterior());
+
+                if (aux == ultimo) {
+                    ultimo = aux.getAnterior();
+                }
+
+                return;
+            }
+
+            aux = aux.getSiguiente();
+        }
+    }
+
+    public void modificar(int id, DatoListaPrestamos nuevoDato) {
+        if (cabeza == null) {
+            return;
+        }
+
+        NodoListaPrestamos aux = cabeza;
+
+        do {
+            if (aux.getDato().getLibro().getId() == id) {
+                aux.setDato(nuevoDato);
+                return;
+            }
+
+            aux = aux.getSiguiente();
+        } while (aux != cabeza);
+    }
+
+    public void eliminar(int id) {
+        if (cabeza == null) {
+            return;
+        }
+
+        if (cabeza.getDato().getLibro().getId() == id) {
+            cabeza = cabeza.getSiguiente();
+            ultimo.setSiguiente(cabeza);
+            cabeza.setAnterior(ultimo);
+            return;
+        }
+
+        NodoListaPrestamos aux = cabeza.getSiguiente();
+
+        while (aux != cabeza) {
+            if (aux.getDato().getLibro().getId() == id) {
+                aux.getAnterior().setSiguiente(aux.getSiguiente());
+                aux.getSiguiente().setAnterior(aux.getAnterior());
+
+                if (aux == ultimo) {
+                    ultimo = aux.getAnterior();
+                }
+
+                return;
+            }
+
+            aux = aux.getSiguiente();
+        }
+    }
+    
+            ListaLibros listaLibros = new ListaLibros(); 
+     
+
+public void insertarLibroPrestamo(Libro libro, String fechaPrestamo, String fechaDevolucion, String nombreUsuario, String cedulaUsuario, ListaLibros listaLibros) {
+    if (listaLibros.existeLibro(libro.getId())) {
+        listaLibros.eliminar(libro.getId());
+        DatoListaPrestamos dato = new DatoListaPrestamos(libro, fechaPrestamo, fechaDevolucion, nombreUsuario, cedulaUsuario);
+        insertar(dato);
+    }
+}
+
+
+
+    @Override
+    public String toString() {
+        String respuesta = "Lista doble circular: \n";
+
+        if (cabeza != null) {
+            NodoListaPrestamos aux = cabeza;
+
+            respuesta += aux.toString() + "\n";
+
+            aux = aux.getSiguiente();
+
+            while (aux != cabeza) {
+                respuesta += aux.toString() + "\n";
+                aux = aux.getSiguiente();
+            }
+        } else {
+            respuesta += "Vacía";
+        }
+
+        return respuesta;
+    }
+}
+
+class NodoListaCategorias {
+    DatoListaCategorias dato;
+    NodoListaCategorias siguiente;
+
+    public NodoListaCategorias(DatoListaCategorias dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+
+    public DatoListaCategorias getDato() {
+        return dato;
+    }
+
+    public void setDato(DatoListaCategorias dato) {
+        this.dato = dato;
+    }
+
+    public NodoListaCategorias getSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(NodoListaCategorias siguiente) {
+        this.siguiente = siguiente;
+    }
+    
+    
+
+
+    @Override
+    public String toString() {
+        return this.dato.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+    
+}
+
+public class NodoListaLibros {
+    private Libro dato;
+    private NodoListaLibros siguiente;
+    
+    public NodoListaLibros(Libro dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+
+    public Libro getDato() {
+        return dato;
+    }
+
+    public void setDato(Libro dato) {
+        this.dato = dato;
+    }
+
+    public NodoListaLibros getSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(NodoListaLibros siguiente) {
+        this.siguiente = siguiente;
+    }
+    
+    
+    @Override
+    public String toString() {
+        return this.dato.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+}
+
+public class NodoListaPrestamos {
+    private DatoListaPrestamos dato;
+    private NodoListaPrestamos siguiente;
+    private NodoListaPrestamos anterior;
+    
+    public NodoListaPrestamos(DatoListaPrestamos dato) {
+        this.dato = dato;
+        this.siguiente = null;
+        this.anterior = null;
+    }
+    
+    public DatoListaPrestamos getDato() {
+        return dato;
+    }
+    
+    public void setDato(DatoListaPrestamos dato) {
+        this.dato = dato;
+    }
+    
+    public NodoListaPrestamos getSiguiente() {
+        return siguiente;
+    }
+    
+    public void setSiguiente(NodoListaPrestamos siguiente) {
+        this.siguiente = siguiente;
+    }
+    
+    public NodoListaPrestamos getAnterior() {
+        return anterior;
+    }
+    
+    public void setAnterior(NodoListaPrestamos anterior) {
+        this.anterior = anterior;
+    }
+
+    @Override
+    public String toString() {
+        return dato.toString();
+    }
+}
